@@ -243,10 +243,12 @@ const handleSubmitTransaction = async (e: React.FormEvent) => {
                           <SelectValue placeholder="Sélectionner une catégorie" />
                         </SelectTrigger>
                           <SelectContent>
-                            {categories.map((category: any) => (
-                              <SelectItem key={category._id} value={category._id}>
-                                {category.name}
-                              </SelectItem>
+                            {categories
+                              .filter((category: any) => category && category._id)
+                              .map((category: any) => (
+                                <SelectItem key={category._id} value={category._id}>
+                                  {category.name}
+                                </SelectItem>
                             ))}
                           </SelectContent>
                       </Select>
