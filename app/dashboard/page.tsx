@@ -262,7 +262,7 @@ const handleSubmitTransaction = async (e: React.FormEvent) => {
                         </SelectTrigger>
                         <SelectContent>
                           {accounts.map((account: any) => (
-                            <SelectItem key={account.id} value={account.id.toString()}>
+                            <SelectItem key={account._id} value={account._id}>
                               {account.name}
                             </SelectItem>
                           ))}
