@@ -218,6 +218,7 @@ useEffect(() => {
                     <div className="grid gap-2">
                       <Label htmlFor="category">Catégorie</Label>
                       <Select
+                        name="category"
                         value={transactionForm.categoryId}
                         onValueChange={(value) => setTransactionForm((prev) => ({ ...prev, categoryId: value }))}
                       >
