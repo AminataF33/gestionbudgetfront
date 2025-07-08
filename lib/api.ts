@@ -108,7 +108,9 @@ class ApiClient {
     return this.request("/transactions", {
       method: "POST",
       body: JSON.stringify(transactionData),
+      
     })
+    
   }
 
   async updateTransaction(id: string, transactionData: any) {
