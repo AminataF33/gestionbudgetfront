@@ -53,9 +53,6 @@ export default function Dashboard() {
     notes: "",
   })
 
-  // useEffect(() => {
-  //   fetchCategories()
-  // }, [transactionType])
 
   const fetchCategories = async () => {
     try {
@@ -67,6 +64,11 @@ export default function Dashboard() {
     }
   }
 
+useEffect(() => {
+  if (showAddTransaction) {
+    fetchCategories()
+  }
+}, [transactionType, showAddTransaction])
 
 
   const handleSubmitTransaction = async (e: React.FormEvent) => {
