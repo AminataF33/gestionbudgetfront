@@ -71,39 +71,64 @@ useEffect(() => {
 }, [transactionType, showAddTransaction])
 
 
-  const handleSubmitTransaction = async (e: React.FormEvent) => {
-    e.preventDefault()
+const handleSubmitTransaction = async (e: React.FormEvent) => {
+  e.preventDefault()
 
-    const amount =
-      transactionType === "expense"
-        ? -Math.abs(Number(transactionForm.amount))
-        : Math.abs(Number(transactionForm.amount))
-
-    const success = await addTransaction({
-      ...transactionForm,
-      amount,
-      categoryId: Number(transactionForm.categoryId),
-      accountId: Number(transactionForm.accountId),
-    })
-
-    if (success) {
-      setShowAddTransaction(false)
-      setTransactionForm({
-        description: "",
-        amount: "",
-        categoryId: "",
-        accountId: "",
-        date: new Date().toISOString().split("T")[0],
-        notes: "",
-      })
-    }
+  // Validation côté client
+  if (!transactionForm.description || !transactionForm.amount || !transactionForm.categoryId || !transactionForm.accountId) {
+    console.error("Tous les champs obligatoires doivent être remplis")
+    return
   }
+
+  const amount = Math.abs(Number(transactionForm.amount))
+  
+  const transactionData = {
+    ...transactionForm,
+    amount,
+    type: transactionType, // Ajout du champ type manquant
+    categoryId: transactionForm.categoryId, // Garder comme string (MongoId)
+    accountId: transactionForm.accountId, // Garder comme string (MongoId)
+    // Supprimer la conversion en Number si vos IDs sont des strings MongoDB
+  }
+
+  console.log("Données envoyées:", transactionData) // Pour déboguer
+
+  const success = await addTransaction(transactionData)
+
+  if (success) {
+    setShowAddTransaction(false)
+    setTransactionForm({
+      description: "",
+      amount: "",
+      categoryId: "",
+      accountId: "",
+      date: new Date().toISOString().split("T")[0],
+      notes: "",
+    })
+  }
+}
 
   const handleLogout = async () => {
     await logout()
     window.location.href = "/"
   }
 
+  const validateTransactionForm = (form : any , type: any) => {
+  const errors = []
+  
+  if (!form.description.trim()) errors.push("Description requise")
+  if (!form.amount || Number(form.amount) <= 0) errors.push("Montant invalide")
+  if (!form.categoryId) errors.push("Catégorie requise")
+  if (!form.accountId) errors.push("Compte requis")
+  if (!form.date) errors.push("Date requise")
+  
+  if (errors.length > 0) {
+    console.error("Erreurs de validation:", errors)
+    return false
+  }
+  
+  return true
+}
   if (loading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">
@@ -225,13 +250,13 @@ useEffect(() => {
                         <SelectTrigger>
                           <SelectValue placeholder="Sélectionner une catégorie" />
                         </SelectTrigger>
-                        <SelectContent>
-                        {categories.map((category: any) => (
-                          <SelectItem key={category._id} value={category._id.toString()}>
-                            {category.name}
-                          </SelectItem>
-                        ))}
-                        </SelectContent>
+                          <SelectContent>
+                            {categories.map((category: any) => (
+                              <SelectItem key={category._id} value={category._id}>
+                                {category.name}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
                       </Select>
                     </div>
                     <div className="grid gap-2">

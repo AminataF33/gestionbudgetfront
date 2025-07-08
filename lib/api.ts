@@ -1,6 +1,9 @@
 const API_BASE_URL = "https://gestionbudgetback-1.onrender.com/api"
 
 class ApiClient {
+  post(arg0: string, transactionData: any) {
+    throw new Error("Method not implemented.")
+  }
   get(arg0: string) {
     throw new Error("Method not implemented.")
   }

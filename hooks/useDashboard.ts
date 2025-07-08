@@ -38,21 +38,33 @@ export function useDashboard() {
       setLoading(false)
     }
   }
+  
   const addTransaction = async (transactionData: any) => {
-    try {
-      const response = await apiClient.createTransaction(transactionData)
-
-      if (response.success) {
-        await fetchDashboard() // Recharger le dashboard
-        return true
-      } else {
-        throw new Error(response.error)
+  try {
+    console.log("Envoi des données:", transactionData)
+    const response = await apiClient.post("/transactions", transactionData)
+    
+    // Recharger les données du dashboard
+    await fetchDashboard()
+    return true
+  } catch (error) {
+    if (error && typeof error === "object" && "response" in error) {
+      // @ts-ignore
+      console.error("Erreur détaillée:", error.response?.data)
+      // @ts-ignore
+      if (error.response?.data?.errors) {
+        // @ts-ignore
+        error.response.data.errors.forEach((err: any) => {
+          console.error(`Erreur ${err.field}: ${err.message}`)
+        })
       }
-    } catch (error) {
-      console.error("Erreur ajout transaction:", error)
-      return false
+    } else {
+      console.error("Erreur détaillée:", error)
     }
+    
+    return false
   }
+}
 
   useEffect(() => {
     fetchDashboard()
