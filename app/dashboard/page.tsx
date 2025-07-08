@@ -89,6 +89,7 @@ const handleSubmitTransaction = async (e: React.FormEvent) => {
     categoryId: transactionForm.categoryId,
     accountId: transactionForm.accountId,
   }
+  console.log("transactionData envoyé :", transactionData)
 
   try {
     const response = await apiClient.createTransaction(transactionData)
@@ -263,11 +264,17 @@ const handleSubmitTransaction = async (e: React.FormEvent) => {
                           <SelectValue placeholder="Sélectionner un compte" />
                         </SelectTrigger>
                         <SelectContent>
-                          {accounts.map((account: any) => (
-                            <SelectItem key={account._id} value={account._id}>
-                              {account.name}
+                          {accounts && accounts.length > 0 ? (
+                            accounts.map((account: any) => (
+                              <SelectItem key={account._id} value={account._id}>
+                                {account.name} - {account.bank}
+                              </SelectItem>
+                            ))
+                          ) : (
+                            <SelectItem value="" disabled>
+                              Aucun compte disponible
                             </SelectItem>
-                          ))}
+                          )}
                         </SelectContent>
                       </Select>
                     </div>
