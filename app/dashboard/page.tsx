@@ -225,11 +225,11 @@ useEffect(() => {
                           <SelectValue placeholder="Sélectionner une catégorie" />
                         </SelectTrigger>
                         <SelectContent>
-                          {categories.map((category: any) => (
-                            <SelectItem key={category._id} value={category._id.toString()}>
-                              {category.name}
-                            </SelectItem>
-                          ))}
+                        {categories.map((category: any) => (
+                          <SelectItem key={category._id} value={category._id.toString()}>
+                            {category.name}
+                          </SelectItem>
+                        ))}
                         </SelectContent>
                       </Select>
                     </div>
@@ -244,7 +244,7 @@ useEffect(() => {
                         </SelectTrigger>
                         <SelectContent>
                           {accounts.map((account: any) => (
-                            <SelectItem key={account._id} value={account._id.toString()}>
+                            <SelectItem key={account.id} value={account.id.toString()}>
                               {account.name}
                             </SelectItem>
                           ))}
@@ -448,7 +448,7 @@ useEffect(() => {
             <div className="space-y-4">
               {recentTransactions.map((transaction: any) => (
                 <div
-                  key={transaction._id}
+                  key={transaction.id}
                   className="flex items-center justify-between p-4 bg-blue-50 rounded-lg hover:bg-blue-100 transition-colors"
                 >
                   <div className="flex items-center space-x-4">
