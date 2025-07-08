@@ -89,7 +89,6 @@ const handleSubmitTransaction = async (e: React.FormEvent) => {
     categoryId: transactionForm.categoryId,
     accountId: transactionForm.accountId,
   }
-  console.log("transactionData envoyé :", transactionData)
 
   try {
     const response = await apiClient.createTransaction(transactionData)
@@ -254,30 +253,30 @@ const handleSubmitTransaction = async (e: React.FormEvent) => {
                           </SelectContent>
                       </Select>
                     </div>
-                    <div className="grid gap-2">
-                      <Label htmlFor="account">Compte</Label>
-                      <Select
-                        value={transactionForm.accountId}
-                        onValueChange={(value) => setTransactionForm((prev) => ({ ...prev, accountId: value }))}
-                      >
-                        <SelectTrigger>
-                          <SelectValue placeholder="Sélectionner un compte" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {accounts && accounts.length > 0 ? (
-                            accounts.map((account: any) => (
-                              <SelectItem key={account._id} value={account._id}>
-                                {account.name} - {account.bank}
-                              </SelectItem>
-                            ))
-                          ) : (
-                            <SelectItem value="" disabled>
-                              Aucun compte disponible
+                  <div className="grid gap-2">
+                    <Label htmlFor="account">Compte</Label>
+                    <Select
+                      value={transactionForm.accountId}
+                      onValueChange={(value) => setTransactionForm((prev) => ({ ...prev, accountId: value }))}
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder="Sélectionner un compte" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {accounts && accounts.length > 0 ? (
+                          accounts.map((account: any) => (
+                            <SelectItem key={account._id} value={account._id}>
+                              {account.name} - {account.bank}
                             </SelectItem>
-                          )}
-                        </SelectContent>
-                      </Select>
-                    </div>
+                          ))
+                        ) : (
+                          <SelectItem value="" disabled>
+                            Aucun compte disponible
+                          </SelectItem>
+                        )}
+                      </SelectContent>
+                    </Select>
+                  </div>
                     <div className="grid gap-2">
                       <Label htmlFor="date">Date</Label>
                       <Input
