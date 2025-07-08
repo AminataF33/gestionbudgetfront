@@ -1,12 +1,6 @@
 const API_BASE_URL = "https://gestionbudgetback-1.onrender.com/api"
 
 class ApiClient {
-  post(arg0: string, transactionData: any) {
-    throw new Error("Method not implemented.")
-  }
-  get(arg0: string) {
-    throw new Error("Method not implemented.")
-  }
   private baseURL: string
   private token: string | null = null
 
@@ -62,6 +56,33 @@ class ApiClient {
     }
   }
 
+  // Méthodes génériques HTTP
+  async get(endpoint: string, params: any = {}) {
+    const queryString = new URLSearchParams(params).toString()
+    const url = queryString ? `${endpoint}?${queryString}` : endpoint
+    return this.request(url, { method: "GET" })
+  }
+
+  async post(endpoint: string, data: any) {
+    return this.request(endpoint, {
+      method: "POST",
+      body: JSON.stringify(data),
+    })
+  }
+
+  async put(endpoint: string, data: any) {
+    return this.request(endpoint, {
+      method: "PUT",
+      body: JSON.stringify(data),
+    })
+  }
+
+  async delete(endpoint: string) {
+    return this.request(endpoint, {
+      method: "DELETE",
+    })
+  }
+
   // Méthodes d'authentification
   async signup(userData: any) {
     const response = await this.request("/auth/signup", {
@@ -111,9 +132,7 @@ class ApiClient {
     return this.request("/transactions", {
       method: "POST",
       body: JSON.stringify(transactionData),
-      
     })
-    
   }
 
   async updateTransaction(id: string, transactionData: any) {
@@ -243,4 +262,3 @@ class ApiClient {
 
 export const apiClient = new ApiClient(API_BASE_URL)
 export default apiClient
-fetch

@@ -74,28 +74,25 @@ useEffect(() => {
 const handleSubmitTransaction = async (e: React.FormEvent) => {
   e.preventDefault()
 
-  // Validation côté client
-  if (!transactionForm.description || !transactionForm.amount || !transactionForm.categoryId || !transactionForm.accountId) {
-    console.error("Tous les champs obligatoires doivent être remplis")
-    return
-  }
+  const amount = transactionType === "expense" 
+    ? -Math.abs(Number(transactionForm.amount))
+    : Math.abs(Number(transactionForm.amount))
 
-  const amount = Math.abs(Number(transactionForm.amount))
-  
   const transactionData = {
     ...transactionForm,
     amount,
-    type: transactionType, // Ajout du champ type manquant
-    categoryId: transactionForm.categoryId, // Garder comme string (MongoId)
-    accountId: transactionForm.accountId, // Garder comme string (MongoId)
-    // Supprimer la conversion en Number si vos IDs sont des strings MongoDB
+    type: transactionType, // Ajout du champ type requis par votre backend
+    categoryId: transactionForm.categoryId,
+    accountId: transactionForm.accountId,
   }
 
-  console.log("Données envoyées:", transactionData) // Pour déboguer
+  console.log("Données à envoyer:", transactionData)
 
-  const success = await addTransaction(transactionData)
-
-  if (success) {
+  try {
+    // Utiliser createTransaction au lieu de post
+    const response = await apiClient.createTransaction(transactionData)
+    console.log("Transaction créée:", response)
+    
     setShowAddTransaction(false)
     setTransactionForm({
       description: "",
@@ -105,6 +102,12 @@ const handleSubmitTransaction = async (e: React.FormEvent) => {
       date: new Date().toISOString().split("T")[0],
       notes: "",
     })
+    
+    // Recharger les données du dashboard si la fonction existe
+    // await fetchDashboardData()
+  } catch (error) {
+    console.error("Erreur lors de la création de la transaction:", error)
+    // Optionnel : afficher un message d'erreur à l'utilisateur
   }
 }
 
