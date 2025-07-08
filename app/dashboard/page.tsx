@@ -10,7 +10,7 @@ import { Badge } from "@/components/ui/badge"
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
+  DialogDescription, 
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -74,6 +74,11 @@ useEffect(() => {
 const handleSubmitTransaction = async (e: React.FormEvent) => {
   e.preventDefault()
 
+  if (!validateTransactionForm(transactionForm, transactionType)) {
+    alert("Veuillez corriger les erreurs du formulaire.")
+    return
+  }
+
   const amount = transactionType === "expense" 
     ? -Math.abs(Number(transactionForm.amount))
     : Math.abs(Number(transactionForm.amount))
@@ -81,33 +86,18 @@ const handleSubmitTransaction = async (e: React.FormEvent) => {
   const transactionData = {
     ...transactionForm,
     amount,
-    type: transactionType, // Ajout du champ type requis par votre backend
+    type: transactionType,
     categoryId: transactionForm.categoryId,
     accountId: transactionForm.accountId,
   }
 
-  console.log("Données à envoyer:", transactionData)
-
   try {
-    // Utiliser createTransaction au lieu de post
     const response = await apiClient.createTransaction(transactionData)
-    console.log("Transaction créée:", response)
-    
-    setShowAddTransaction(false)
-    setTransactionForm({
-      description: "",
-      amount: "",
-      categoryId: "",
-      accountId: "",
-      date: new Date().toISOString().split("T")[0],
-      notes: "",
-    })
-    
-    // Recharger les données du dashboard si la fonction existe
-    // await fetchDashboardData()
-  } catch (error) {
+    // ... suite du code
+  } catch (error: any) {
+    // Affichez le message d’erreur détaillé
+    alert(error.message || "Erreur lors de la création de la transaction")
     console.error("Erreur lors de la création de la transaction:", error)
-    // Optionnel : afficher un message d'erreur à l'utilisateur
   }
 }
 

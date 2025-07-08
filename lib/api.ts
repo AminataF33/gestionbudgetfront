@@ -15,7 +15,7 @@ class ApiClient {
   setToken(token: string) {
     this.token = token
     if (typeof window !== "undefined") {
-      localStorage.setItem("auth-token", token)
+      localStorage.setItem("auth-token", token) 
     }
   }
 
