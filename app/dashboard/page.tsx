@@ -35,6 +35,7 @@ import {
 import Link from "next/link"
 import { useDashboard } from "@/hooks/useDashboard"
 import { useAuth } from "@/hooks/useAuth"
+import apiClient from "@/lib/api"
 
 export default function Dashboard() {
   const { data, loading, error, addTransaction } = useDashboard()
@@ -42,6 +43,7 @@ export default function Dashboard() {
   const [showAddTransaction, setShowAddTransaction] = useState(false)
   const [transactionType, setTransactionType] = useState("expense")
   const [categories, setCategories] = useState([])
+  
   const [transactionForm, setTransactionForm] = useState({
     description: "",
     amount: "",
@@ -51,20 +53,21 @@ export default function Dashboard() {
     notes: "",
   })
 
-  useEffect(() => {
-    fetchCategories()
-  }, [transactionType])
+  // useEffect(() => {
+  //   fetchCategories()
+  // }, [transactionType])
 
   const fetchCategories = async () => {
     try {
-      const response = await fetch(`/api/categories?type=${transactionType === "income" ? "income" : "expense"}`)
-      const result = await response.json()
-      console.log("Catégories récupérées:", result)
-      setCategories(result.data)
+      const response = await apiClient.getCategories({ type: transactionType })
+      console.log("Catégories récupérées:", response)
+      setCategories(response.data)
     } catch (error) {
       console.error("Erreur chargement catégories:", error)
     }
   }
+
+
 
   const handleSubmitTransaction = async (e: React.FormEvent) => {
     e.preventDefault()

@@ -42,6 +42,9 @@ class ApiClient {
     }
 
     try {
+      console.log("Fetch URL:", url)
+      console.log("Fetch config:", config)
+
       const response = await fetch(url, config)
       const data = await response.json()
 
@@ -235,3 +238,4 @@ class ApiClient {
 
 export const apiClient = new ApiClient(API_BASE_URL)
 export default apiClient
+fetch
