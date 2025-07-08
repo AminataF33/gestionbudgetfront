@@ -59,6 +59,7 @@ export default function Dashboard() {
     try {
       const response = await fetch(`/api/categories?type=${transactionType === "income" ? "income" : "expense"}`)
       const result = await response.json()
+      console.log("Catégories récupérées:", result)
       setCategories(result.data)
     } catch (error) {
       console.error("Erreur chargement catégories:", error)

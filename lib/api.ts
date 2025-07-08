@@ -1,4 +1,4 @@
-const API_BASE_URL = "https://gestionbudgetback-1.onrender.com/api"
+const API_BASE_URL = "https://gestionbudgetback-1.onrender.com/api/"
 
 class ApiClient {
   get(arg0: string) {

@@ -38,7 +38,6 @@ export function useDashboard() {
       setLoading(false)
     }
   }
-
   const addTransaction = async (transactionData: any) => {
     try {
       const response = await apiClient.createTransaction(transactionData)
