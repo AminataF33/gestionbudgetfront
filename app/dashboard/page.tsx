@@ -79,9 +79,8 @@ const handleSubmitTransaction = async (e: React.FormEvent) => {
     return
   }
 
-  const amount = transactionType === "expense" 
-    ? -Math.abs(Number(transactionForm.amount))
-    : Math.abs(Number(transactionForm.amount))
+  // Toujours positif
+  const amount = Math.abs(Number(transactionForm.amount))
 
   const transactionData = {
     ...transactionForm,
